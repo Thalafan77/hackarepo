@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unwind - Breathe. Move. Express.</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #fff3e0);
+      color: #333;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    header {
+      padding: 2rem 1rem;
+      background: #ffe0b2;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: #ff6f00;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      margin-top: -10px;
+      color: #6d4c41;
+    }
+
+    .segments {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .segment {
+      background: #ffffffcc;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin: 0 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .segment:hover {
+      transform: scale(1.02);
+    }
+
+    .segment h2 {
+      font-size: 1.8rem;
+      color: #00897b;
+    }
+
+    .segment p {
+      font-size: 1rem;
+      color: #555;
+    }
+
+    .segment.mind { border-left: 10px solid #81d4fa; }
+    .segment.body { border-left: 10px solid #aed581; }
+    .segment.express { border-left: 10px solid #f48fb1; }
+
+    button {
+      margin-top: 1rem;
+      background: #ff8a65;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #ff7043;
+    }
+
+    footer {
+      padding: 1.5rem;
+      background: #ffe0b2;
+      color: #6d4c41;
+      font-size: 0.9rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Unwind</h1>
+    <p class="subtitle">Breathe. Move. Express.</p>
+  </header>
+
+  <section class="segments">
+    <div class="segment mind">
+      <h2>🧠 Mind Unwind</h2>
+      <p>Take calming breaks with guided breathing and short meditations to refocus your mind.</p>
+      <button onclick="alert('You are now simulating a guided breathing session!')">Start Mind Unwind</button>
+    </div>
+
+    <div class="segment body">
+      <h2>🏃 Body Unwind</h2>
+      <p>Loosen up with stretches or dance movements designed to boost mood and reduce stress.</p>
+      <button onclick="alert('You are now simulating a mindful movement break!')">Start Body Unwind</button>
+    </div>
+
+    <div class="segment express">
+      <h2>🎨 Express Unwind</h2>
+      <p>Get creative! Journal, doodle, or voice out your thoughts to express and reflect.</p>
+      <button onclick="alert('You are now simulating a creative expression activity!')">Start Express Unwind</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>Made with 💛 for your peace of mind.</p>
+  </footer>
+
+</body>
+</html>

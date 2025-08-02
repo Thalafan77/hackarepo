@@ -3,123 +3,208 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Unwind - Breathe. Move. Express.</title>
+  <title>Unwind</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #fff3e0);
-      color: #333;
       margin: 0;
-      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #d0e7ff, #f0f7ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #003366;
+      transition: background 0.5s ease;
+    }
+    body.dark {
+      background: #111;
+      color: #eee;
+    }
+    .container {
       text-align: center;
+      background: rgba(255, 255, 255, 0.75);
+      padding: 2rem;
+      border-radius: 2rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 500px;
     }
-
-    header {
-      padding: 2rem 1rem;
-      background: #ffe0b2;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    .dark .container {
+      background: rgba(30, 30, 30, 0.8);
     }
-
-    h1 {
+    .title {
       font-size: 3rem;
-      color: #ff6f00;
+      margin-bottom: 0.5rem;
     }
-
     .subtitle {
       font-size: 1.2rem;
-      margin-top: -10px;
-      color: #6d4c41;
+      margin-bottom: 2rem;
     }
-
-    .segments {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      padding: 2rem;
-    }
-
-    .segment {
-      background: #ffffffcc;
-      border-radius: 1rem;
-      padding: 1.5rem;
-      margin: 0 1rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-    }
-
-    .segment:hover {
-      transform: scale(1.02);
-    }
-
-    .segment h2 {
-      font-size: 1.8rem;
-      color: #00897b;
-    }
-
-    .segment p {
-      font-size: 1rem;
-      color: #555;
-    }
-
-    .segment.mind { border-left: 10px solid #81d4fa; }
-    .segment.body { border-left: 10px solid #aed581; }
-    .segment.express { border-left: 10px solid #f48fb1; }
-
-    button {
-      margin-top: 1rem;
-      background: #ff8a65;
-      color: white;
+    .segments button,
+    .feature-box button {
+      margin: 0.5rem;
+      padding: 0.8rem 1.5rem;
       border: none;
-      padding: 0.7rem 1.5rem;
-      border-radius: 5px;
+      background: #0077cc;
+      color: white;
       font-size: 1rem;
+      border-radius: 1rem;
       cursor: pointer;
       transition: background 0.3s ease;
     }
-
-    button:hover {
-      background: #ff7043;
+    .segments button:hover,
+    .feature-box button:hover {
+      background: #005fa3;
     }
-
-    footer {
-      padding: 1.5rem;
-      background: #ffe0b2;
-      color: #6d4c41;
-      font-size: 0.9rem;
+    .feature-box {
       margin-top: 2rem;
+      text-align: center;
+    }
+    input, select {
+      padding: 0.5rem;
+      border-radius: 1rem;
+      border: 1px solid #ccc;
+      margin-top: 0.5rem;
+    }
+    .output, #moodOutput, #gratitudeOutput {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      min-height: 50px;
+      color: #444;
+    }
+    .dark .output, .dark #moodOutput, .dark #gratitudeOutput {
+      color: #ccc;
+    }
+    #timerBar {
+      margin: 1rem auto;
+      width: 100%;
+      height: 20px;
+      background: #ccc;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+    #progress {
+      height: 100%;
+      width: 0%;
+      background: #4caf50;
+      transition: width 1s linear;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1 class="title">Unwind</h1>
+    <p class="subtitle">Find balance in your day</p>
 
-  <header>
-    <h1>Unwind</h1>
-    <p class="subtitle">Breathe. Move. Express.</p>
-  </header>
-
-  <section class="segments">
-    <div class="segment mind">
-      <h2>🧠 Mind Unwind</h2>
-      <p>Take calming breaks with guided breathing and short meditations to refocus your mind.</p>
-      <button onclick="alert('You are now simulating a guided breathing session!')">Start Mind Unwind</button>
+    <div class="segments">
+      <button onclick="simulateAction('Pause')">⏸ Pause</button>
+      <button onclick="simulateAction('Reflect')">🪞 Reflect</button>
+      <button onclick="simulateAction('Unplug')">🔌 Unplug</button>
     </div>
 
-    <div class="segment body">
-      <h2>🏃 Body Unwind</h2>
-      <p>Loosen up with stretches or dance movements designed to boost mood and reduce stress.</p>
-      <button onclick="alert('You are now simulating a mindful movement break!')">Start Body Unwind</button>
+    <div class="feature-box">
+      <h3>Mood Tracker</h3>
+      <select id="moodSelect" onchange="trackMood()">
+        <option value="">Select mood</option>
+        <option>😊 Happy</option>
+        <option>😔 Sad</option>
+        <option>😖 Stressed</option>
+        <option>😌 Calm</option>
+      </select>
+      <div id="moodOutput"></div>
     </div>
 
-    <div class="segment express">
-      <h2>🎨 Express Unwind</h2>
-      <p>Get creative! Journal, doodle, or voice out your thoughts to express and reflect.</p>
-      <button onclick="alert('You are now simulating a creative expression activity!')">Start Express Unwind</button>
+    <div class="feature-box">
+      <h3>Gratitude Note</h3>
+      <input type="text" id="gratitudeInput" placeholder="I'm grateful for..." />
+      <button onclick="saveGratitude()">➕ Save</button>
+      <div id="gratitudeOutput"></div>
     </div>
-  </section>
 
-  <footer>
-    <p>Made with 💛 for your peace of mind.</p>
-  </footer>
+    <div class="feature-box">
+      <h3>5-Min Focus Timer</h3>
+      <button onclick="startTimer()">▶ Start</button>
+      <div id="timerBar"><div id="progress"></div></div>
+    </div>
 
+    <div class="feature-box">
+      <h3>Background Sounds</h3>
+      <button onclick="toggleSound()">🌧 Toggle Rain</button>
+    </div>
+
+    <div class="feature-box">
+      <h3>Display</h3>
+      <button onclick="toggleDarkMode()">🌓 Toggle Dark Mode</button>
+    </div>
+
+    <div id="output" class="output">Choose an option above to begin.</div>
+  </div>
+
+  <!-- Optional audio (you can replace src with a working URL or local file) -->
+  <audio id="rainSound" loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_b597a20551.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    function simulateAction(action) {
+      const output = document.getElementById('output');
+      let message = '';
+      switch(action) {
+        case 'Pause':
+          message = 'Take a deep breath... pause for 5 minutes. 🌬️';
+          break;
+        case 'Reflect':
+          message = 'Think about a recent positive moment. 🪞';
+          break;
+        case 'Unplug':
+          message = 'Step away from tech for 10 minutes. Stretch. 🌿';
+          break;
+        default:
+          message = 'Choose an option to begin.';
+      }
+      output.textContent = message;
+    }
+
+    function trackMood() {
+      const mood = document.getElementById('moodSelect').value;
+      document.getElementById('moodOutput').textContent = mood
+        ? `Mood saved: ${mood}`
+        : '';
+    }
+
+    function saveGratitude() {
+      const input = document.getElementById('gratitudeInput');
+      const message = input.value.trim();
+      if (message) {
+        document.getElementById('gratitudeOutput').textContent = `Gratitude noted: "${message}"`;
+        input.value = '';
+      }
+    }
+
+    function startTimer() {
+      const progress = document.getElementById('progress');
+      progress.style.width = '0%';
+      let percent = 0;
+      const interval = setInterval(() => {
+        percent++;
+        progress.style.width = percent + '%';
+        if (percent >= 100) clearInterval(interval);
+      }, 3000); // 100 * 3000ms = 5 minutes
+    }
+
+    function toggleSound() {
+      const sound = document.getElementById('rainSound');
+      if (sound.paused) {
+        sound.play();
+      } else {
+        sound.pause();
+      }
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    }
+  </script>
 </body>
 </html>
+

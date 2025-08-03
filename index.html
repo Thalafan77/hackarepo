@@ -1,210 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Unwind</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #d0e7ff, #f0f7ff);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      color: #003366;
-      transition: background 0.5s ease;
-    }
-    body.dark {
-      background: #111;
-      color: #eee;
-    }
-    .container {
-      text-align: center;
-      background: rgba(255, 255, 255, 0.75);
-      padding: 2rem;
-      border-radius: 2rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 500px;
-    }
-    .dark .container {
-      background: rgba(30, 30, 30, 0.8);
-    }
-    .title {
-      font-size: 3rem;
-      margin-bottom: 0.5rem;
-    }
-    .subtitle {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-    }
-    .segments button,
-    .feature-box button {
-      margin: 0.5rem;
-      padding: 0.8rem 1.5rem;
-      border: none;
-      background: #0077cc;
-      color: white;
-      font-size: 1rem;
-      border-radius: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .segments button:hover,
-    .feature-box button:hover {
-      background: #005fa3;
-    }
-    .feature-box {
-      margin-top: 2rem;
-      text-align: center;
-    }
-    input, select {
-      padding: 0.5rem;
-      border-radius: 1rem;
-      border: 1px solid #ccc;
-      margin-top: 0.5rem;
-    }
-    .output, #moodOutput, #gratitudeOutput {
-      margin-top: 1rem;
-      font-size: 1.1rem;
-      min-height: 50px;
-      color: #444;
-    }
-    .dark .output, .dark #moodOutput, .dark #gratitudeOutput {
-      color: #ccc;
-    }
-    #timerBar {
-      margin: 1rem auto;
-      width: 100%;
-      height: 20px;
-      background: #ccc;
-      border-radius: 1rem;
-      overflow: hidden;
-    }
-    #progress {
-      height: 100%;
-      width: 0%;
-      background: #4caf50;
-      transition: width 1s linear;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1 class="title">Unwind</h1>
-    <p class="subtitle">Find balance in your day</p>
+    :root {
+      --bg-color: #f5f7fa;
+      --primary-color: #7f9cf5;
+      --secondary-color: #c3dafe;
+      --text-color: #2a2e45;
+      --soft-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Nunito', sans-serif;
+}
 
-    <div class="segments">
-      <button onclick="simulateAction('Pause')">⏸ Pause</button>
-      <button onclick="simulateAction('Reflect')">🪞 Reflect</button>
-      <button onclick="simulateAction('Unplug')">🔌 Unplug</button>
-    </div>
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
 
-    <div class="feature-box">
-      <h3>Mood Tracker</h3>
-      <select id="moodSelect" onchange="trackMood()">
-        <option value="">Select mood</option>
-        <option>😊 Happy</option>
-        <option>😔 Sad</option>
-        <option>😖 Stressed</option>
-        <option>😌 Calm</option>
-      </select>
-      <div id="moodOutput"></div>
-    </div>
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
 
-    <div class="feature-box">
-      <h3>Gratitude Note</h3>
-      <input type="text" id="gratitudeInput" placeholder="I'm grateful for..." />
-      <button onclick="saveGratitude()">➕ Save</button>
-      <div id="gratitudeOutput"></div>
-    </div>
+header h1 {
+  font-size: 2.8rem;
+  color: var(--primary-color);
+}
 
-    <div class="feature-box">
-      <h3>5-Min Focus Timer</h3>
-      <button onclick="startTimer()">▶ Start</button>
-      <div id="timerBar"><div id="progress"></div></div>
-    </div>
+header p {
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+}
 
-    <div class="feature-box">
-      <h3>Background Sounds</h3>
-      <button onclick="toggleSound()">🌧 Toggle Rain</button>
-    </div>
-
-    <div class="feature-box">
-      <h3>Display</h3>
-      <button onclick="toggleDarkMode()">🌓 Toggle Dark Mode</button>
-    </div>
-
-    <div id="output" class="output">Choose an option above to begin.</div>
-  </div>
-
-  <!-- Optional audio (you can replace src with a working URL or local file) -->
-  <audio id="rainSound" loop>
-    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_b597a20551.mp3" type="audio/mpeg" />
-  </audio>
-
-  <script>
-    function simulateAction(action) {
-      const output = document.getElementById('output');
-      let message = '';
-      switch(action) {
-        case 'Pause':
-          message = 'Take a deep breath... pause for 5 minutes. 🌬️';
-          break;
-        case 'Reflect':
-          message = 'Think about a recent positive moment. 🪞';
-          break;
-        case 'Unplug':
-          message = 'Step away from tech for 10 minutes. Stretch. 🌿';
-          break;
-        default:
-          message = 'Choose an option to begin.';
-      }
-      output.textContent = message;
-    }
-
-    function trackMood() {
-      const mood = document.getElementById('moodSelect').value;
-      document.getElementById('moodOutput').textContent = mood
-        ? `Mood saved: ${mood}`
-        : '';
-    }
-
-    function saveGratitude() {
-      const input = document.getElementById('gratitudeInput');
-      const message = input.value.trim();
-      if (message) {
-        document.getElementById('gratitudeOutput').textContent = `Gratitude noted: "${message}"`;
-        input.value = '';
-      }
-    }
-
-    function startTimer() {
-      const progress = document.getElementById('progress');
-      progress.style.width = '0%';
-      let percent = 0;
-      const interval = setInterval(() => {
-        percent++;
-        progress.style.width = percent + '%';
-        if (percent >= 100) clearInterval(interval);
-      }, 3000); // 100 * 3000ms = 5 minutes
-    }
-
-    function toggleSound() {
-      const sound = document.getElementById('rainSound');
-      if (sound.paused) {
-        sound.play();
-      } else {
-        sound.pause();
-      }
-    }
-
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark');
-    }
-  </script>
-</body>
-</html>
+.container {
+  max-width: 800px;
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
 

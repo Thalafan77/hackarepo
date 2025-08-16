@@ -1,51 +1,166 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Unwind</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Plant Care Dashboard</title>
   <style>
-    :root {
-      --bg-color: #f5f7fa;
-      --primary-color: #7f9cf5;
-      --secondary-color: #c3dafe;
-      --text-color: #2a2e45;
-      --soft-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    }* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Nunito', sans-serif;
-}
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: navy;
+      color: black;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-body {
-  background: var(--bg-color);
-  color: var(--text-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-}
+    header {
+      background: gold;
+      color: navy;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
 
-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
 
-header h1 {
-  font-size: 2.8rem;
-  color: var(--primary-color);
-}
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      border: 3px solid gold;
+    }
 
-header p {
-  font-size: 1.2rem;
-  margin-top: 0.5rem;
-}
+    .card h2 {
+      color: navy;
+      margin-bottom: 1rem;
+    }
 
-.container {
-  max-width: 800px;
-  width: 100%;
-  background: white;
-  border-radius: 20px;
-  padding: 2rem;
+    .status {
+      font-size: 1.3rem;
+      margin: 1rem 0;
+      padding: 0.8rem;
+      border-radius: 0.5rem;
+      font-weight: bold;
+      border: 2px solid gold;
+    }
 
+    .status.wet {
+      background: lightgreen;
+      color: darkgreen;
+    }
+
+    .status.dry {
+      background: lightcoral;
+      color: darkred;
+    }
+
+    button {
+      background: navy;
+      color: white;
+      border: 2px solid gold;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: gold;
+      color: navy;
+    }
+
+    footer {
+      background: gold;
+      text-align: center;
+      padding: 0.6rem;
+      font-size: 0.9rem;
+      color: navy;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>🌱 Plant Care Dashboard</header>
+
+  <main>
+    <div class="card">
+      <h2>Soil Condition</h2>
+      <div id="status" class="status">Waiting for data...</div>
+      <button id="connect">Connect to Arduino</button>
+
+      <div style="margin-top: 1.5rem;">
+        <p><strong>Now Playing:</strong></p>
+        <p id="track">None</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>Made with 💛 navy • gold • white</footer>
+
+  <audio id="happy" loop></audio>
+  <audio id="sad" loop></audio>
+
+  <script>
+    const happy = document.getElementById('happy');
+    const sad = document.getElementById('sad');
+    const statusDiv = document.getElementById('status');
+    const track = document.getElementById('track');
+
+    // set your own MP3 files
+    happy.src = 'happy_432hz.mp3';
+    sad.src = 'sad_song.mp3';
+
+    document.getElementById('connect').addEventListener('click', async () => {
+      try {
+        const port = await navigator.serial.requestPort();
+        await port.open({ baudRate: 115200 });
+        const decoder = new TextDecoderStream();
+        const readableStreamClosed = port.readable.pipeTo(decoder.writable);
+        const reader = decoder.readable.getReader();
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          if (!value) continue;
+
+          const line = value.trim();
+
+          if (line.includes('WET')) {
+            sad.pause(); sad.currentTime = 0;
+            happy.play().catch(()=>{});
+            statusDiv.textContent = "Plant is Happy 🌿 (Wet)";
+            statusDiv.className = "status wet";
+            track.textContent = "Happy 432 Hz";
+          } else if (line.includes('DRY')) {
+            happy.pause(); happy.currentTime = 0;
+            sad.play().catch(()=>{});
+            statusDiv.textContent = "Plant is Sad 😢 (Dry)";
+            statusDiv.className = "status dry";
+            track.textContent = "Sad Song";
+          }
+        }
+      } catch (e) {
+        console.error(e);
+        alert("Serial connection failed. Try again.");
+      }
+    });
+  </script>
+</body>
+</html>

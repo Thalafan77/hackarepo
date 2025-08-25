@@ -54,16 +54,6 @@
     }
     .status.wet { color: darkgreen; }
     .status.dry { color: darkred; }
-    .badge {
-      display: inline-block;
-      margin-left: 0.5rem;
-      padding: 0.2rem 0.6rem;
-      border-radius: 0.5rem;
-      background: gold;
-      color: navy;
-      font-size: 0.85rem;
-      font-weight: bold;
-    }
     button {
       background: navy;
       color: white;
@@ -109,8 +99,9 @@
 <main>
   <div class="card">
     <h2>Soil Condition</h2>
+    <!-- Removed the extra Gold Highlight badge -->
     <div id="status" class="status">
-      Waiting for data… <span class="badge">Gold Highlight</span>
+      Waiting for data…
     </div>
 
     <div class="row">
@@ -121,7 +112,7 @@
     <div style="margin-top: 1.5rem;">
       <p><strong>Now Playing:</strong> <span id="track">None</span></p>
       <div class="row">
-        <span class="pill">Theme: navy • white • gold</span>
+        <!-- Removed the Theme pill; only Serial status remains -->
         <span class="pill" id="serial-pill">Serial: disconnected</span>
       </div>
     </div>
